@@ -25,6 +25,7 @@ System.out.println(personList);
 
 	<%
 	for (int i = 0; i < personList.size(); i++) {
+		PersonVO personvo = personList.get(i);
 	%>
 	<table border="1">
 		<tbody>
@@ -41,8 +42,8 @@ System.out.println(personList);
 				<td><%=personList.get(i).getCompany()%></td>
 			<tr>
 			<tr>
-				<td>[수정폼으로이동]</td>
-				<td><a href="http://localhost:8080/phonebook2/pbc?action=delete">[삭제]</a></td>
+				<td><a href="http://localhost:8080/phonebook2/pbc?action=uform&no=<%= personvo.getPersonId() %>">[수정폼으로이동]</a></td>
+				<td><a href="http://localhost:8080/phonebook2/pbc?action=delete&no=<%= personvo.getPersonId() %>">[삭제]</a></td>
 			</tr>
 		</tbody>
 	</table>

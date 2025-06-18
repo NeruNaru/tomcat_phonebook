@@ -55,9 +55,7 @@ public class PhonebookController extends HttpServlet {
 			// 2)jsp에게 화면을 그리게 한다(포워드)
 			//////////////////////////////////////////////////////////////////////
 
-		} else if ("mform".equals(action)) {
-			System.out.println("수정폼");
-		} else if ("write".equals(action)) {
+		}  else if ("write".equals(action)) {
 			//틍록
 			System.out.println("등록");
 			// 파라미터 3개 꺼내기
@@ -99,8 +97,25 @@ public class PhonebookController extends HttpServlet {
 			phonebookdao.personDelete(no);
 			//리다이렉트 action=list
 			response.sendRedirect("http://localhost:8080/phonebook2/pbc?action=list");
-		}else if("update".equals(action)) {
-			//dao
+		}else if("uform&no=\\d".equals(action)){	// 수정폼
+			System.out.println("수정폼");
+			RequestDispatcher rd = request.getRequestDispatcher("/updateForm.jsp");
+			rd.forward(request, response);
+		} else if("update".equals(action)) {
+			System.out.println("수정");
+			// name, hp, company 파라미터 호출
+			String name = request.getParameter("name");
+			String hp = request.getParameter("hp");
+			String company = request.getParameter("company");
+			// no 파라미터 호출
+			int no = Integer.parseInt(request.getParameter("no"));
+			
+			// 데이터 묶기
+			PersonVO personvo = new PersonVO(name, hp, company);
+			System.out.println(personvo);
+			//dao 통해서 저장하기
+			PhonebookDAO phonebookdao = new PhonebookDAO();
+			phonebookdao.personUpdate(personvo, no);
 		}
 	}
 
