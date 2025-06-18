@@ -21,6 +21,10 @@ public class PersonVO {
 	}
 	public PersonVO() {
 	}
+	public PersonVO(int personId) {
+		super();
+		this.personId = personId;
+	}
 	//method g/s
 	public int getPersonId() {
 		return personId;

@@ -102,9 +102,9 @@ public class PhonebookDAO {
 	}
 
 	// personUpdate
-	public int personUpdate(PersonVO personVO, int no) {
+	public int personUpdate(PersonVO personVO) {
 		System.out.println("personUpdate()");
-		
+
 		int count = -1;
 
 		try
@@ -118,9 +118,9 @@ public class PhonebookDAO {
 			// SQL문 준비
 			String query = "";
 			query += "update person ";
-			query += " set name = ?, ";
-			query += " set hp = ?, ";
-			query += " set company = ? ";
+			query += " set	name = ?, ";
+			query += " 		hp = ?, ";
+			query += " 		company = ? ";
 			query += " where person_id = ? ";
 
 			// 바인딩
@@ -128,7 +128,7 @@ public class PhonebookDAO {
 			pstmt.setString(1, personVO.getName());
 			pstmt.setString(2, personVO.getHp());
 			pstmt.setString(3, personVO.getCompany());
-			pstmt.setInt(4, no);
+			pstmt.setInt(4, personVO.getPersonId());
 
 			// 실행
 			count = pstmt.executeUpdate();
@@ -225,6 +225,50 @@ public class PhonebookDAO {
 
 		this.close();
 		return personList;
+	}
+
+	// personselectone
+	public PersonVO phonebookSelectOne(int personId) {
+		System.out.println("phonebookSelectOne()");
+		PersonVO personvo = null;
+
+		this.connect();
+
+		try {
+
+			// 3. SQL문 준비 / 바인딩 / 실행
+			// SQL문 준비
+			String query = "";
+			query += " select person_id, ";
+			query += "        name, ";
+			query += "        hp, ";
+			query += "        company ";
+			query += " from person ";
+			query += " where person_id = ? ";
+
+			// 바인딩
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, personId);
+
+			// 실행
+			rs = pstmt.executeQuery();
+
+			// 4.결과처리 (java 리스트로 만든다)
+			if (rs.next()) {
+				personvo = new PersonVO(rs.getInt("person_id"), rs.getString("name"), rs.getString("hp"),
+						rs.getString("company"));
+			}
+
+		} catch (
+
+		SQLException e) {
+			System.out.println("error:" + e);
+		}
+
+		// 5. 자원정리
+		this.close();
+
+		return personvo;
 	}
 
 }

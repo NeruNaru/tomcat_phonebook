@@ -28,6 +28,7 @@ public class PhonebookController extends HttpServlet {
 		// action 파라미터의 값이 뭔지 알아야함
 		String action = request.getParameter("action");
 		System.out.println(action);
+		
 		if ("list".equals(action)) {
 			// db데이터가져온다 --> list
 			PhonebookDAO phonebookDAO = new PhonebookDAO();
@@ -97,25 +98,33 @@ public class PhonebookController extends HttpServlet {
 			phonebookdao.personDelete(no);
 			//리다이렉트 action=list
 			response.sendRedirect("http://localhost:8080/phonebook2/pbc?action=list");
-		}else if("uform&no=\\d".equals(action)){	// 수정폼
+		}else if("uform".equals(action)){	// 수정폼
 			System.out.println("수정폼");
+			int no = Integer.parseInt(request.getParameter("no"));
+			
+			PhonebookDAO phonebookdao = new PhonebookDAO();
+		    PersonVO personvo = phonebookdao.phonebookSelectOne(no);
+			
+		    request.setAttribute("personvo", personvo);
+		    
 			RequestDispatcher rd = request.getRequestDispatcher("/updateForm.jsp");
 			rd.forward(request, response);
 		} else if("update".equals(action)) {
 			System.out.println("수정");
+			// no 파라미터 호출
+			int no = Integer.parseInt(request.getParameter("no"));
 			// name, hp, company 파라미터 호출
 			String name = request.getParameter("name");
 			String hp = request.getParameter("hp");
 			String company = request.getParameter("company");
-			// no 파라미터 호출
-			int no = Integer.parseInt(request.getParameter("no"));
 			
 			// 데이터 묶기
-			PersonVO personvo = new PersonVO(name, hp, company);
+			PersonVO personvo = new PersonVO(no, name, hp, company);
 			System.out.println(personvo);
 			//dao 통해서 저장하기
 			PhonebookDAO phonebookdao = new PhonebookDAO();
-			phonebookdao.personUpdate(personvo, no);
+			phonebookdao.personUpdate(personvo);
+			response.sendRedirect("http://localhost:8080/phonebook2/pbc?action=list");
 		}
 	}
 

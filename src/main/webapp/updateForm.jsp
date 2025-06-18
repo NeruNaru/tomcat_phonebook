@@ -4,19 +4,13 @@
 <%@ page import="com.javaex.vo.PersonVO"%>
 
 <%
+System.out.println("수정폼 진입 완료");
 int no = Integer.parseInt(request.getParameter("no"));
 
-@SuppressWarnings("unchecked")
-List<PersonVO> personList = (List<PersonVO>) request.getAttribute("pList");
-
-PersonVO target = null;
-for (PersonVO p : personList) {
-    if (p.getPersonId() == no) { // personId가 no라면
-        target = p;
-        break;
-    }
-}
+PersonVO personvo = (PersonVO) request.getAttribute("personvo");
+System.out.println(no);
 %>
+
 
 
 <!DOCTYPE html>
@@ -31,12 +25,14 @@ for (PersonVO p : personList) {
 	<p>전화번호를 수정하는 폼 입니다</p>
 	<form action="http://localhost:8080/phonebook2/pbc?" method="get">
 		<input type="hidden" name="action" value="update">
+		<input type="hidden" name="no" value="<%= personvo.getPersonId() %>">
+		
 		<label>이름(name)</label>
-		<input type="text" name="name" value="<%= target.getName() %>"> <br>
+		<input type="text" name="name" value="<%= personvo != null ? personvo.getName() : "" %>"> <br>
 		<label>핸드폰(hp)</label>
-		<input type="text" name="hp" value="<%= target.getHp() %>"> <br>
+		<input type="text" name="hp" value="<%= personvo != null ? personvo.getHp() : "" %>"> <br>
 		<label>회사(company)</label>
-		<input type="text" name="company" value="<%= target.getCompany() %>"> <br>
+		<input type="text" name="company" value="<%= personvo != null ? personvo.getCompany() : "" %>"> <br>
 
 		<button>수정</button>
 	</form>
